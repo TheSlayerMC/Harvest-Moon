@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "wet=false": {
+        "model": "hmfomt:block/farmland"
+    },
+    "wet=true": {
+        "model": "hmfomt:block/farmland_moist"
+    }
+  }
+}
