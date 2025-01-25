@@ -14,18 +14,26 @@ import java.util.function.ToIntFunction;
 public class HMBlockProps {
 
     public static BlockBehaviour.Properties STONE = BlockBehaviour.Properties.of().mapColor(MapColor.STONE)
-            .strength(1.5F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.STONE)
             .requiresCorrectToolForDrops();
 
-    public static BlockBehaviour.Properties TROPHY = BlockBehaviour.Properties.of().mapColor(MapColor.STONE)
-            .strength(1.5F)
+    public static BlockBehaviour.Properties MODELED_STONE = BlockBehaviour.Properties.of().mapColor(MapColor.STONE)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.STONE)
+            .isViewBlocking(HMBlockProps::never)
+            .isSuffocating(HMBlockProps::never)
+            .isValidSpawn(HMBlockProps::never)
             .noOcclusion()
             .requiresCorrectToolForDrops();
 
+    public static BlockBehaviour.Properties WOOL = BlockBehaviour.Properties.of().mapColor(MapColor.WOOL)
+            .strength(-1F, 3600000.0F)
+            .sound(SoundType.WOOL)
+            .requiresCorrectToolForDrops();
+
     public static BlockBehaviour.Properties GLASS = BlockBehaviour.Properties.of()
-            .strength(1F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.GLASS)
             .noOcclusion()
             .isViewBlocking(HMBlockProps::never)
@@ -36,52 +44,43 @@ public class HMBlockProps {
 
     public static BlockBehaviour.Properties MUSHROOM_BLOCK = BlockBehaviour.Properties.of()
             .mapColor(MapColor.COLOR_BROWN)
-            .strength(0.5F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.WOOD)
             .requiresCorrectToolForDrops();
 
     public static BlockBehaviour.Properties CHEST = BlockBehaviour.Properties.of()
-            .strength(1.5F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.STONE)
             .noOcclusion();
 
     public static BlockBehaviour.Properties GLOW_BLOCK = BlockBehaviour.Properties.of()
-            .strength(1.5F)
+            .strength(-1F, 3600000.0F)
             .lightLevel((level) -> 15)
             .sound(SoundType.GLASS);
 
     public static BlockBehaviour.Properties DIRT = BlockBehaviour.Properties.of()
-            .strength(1F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.GRAVEL);
-
-    public static BlockBehaviour.Properties SLIME = BlockBehaviour.Properties.of()
-            .strength(0.5F)
-            .sound(SoundType.SLIME_BLOCK)
-            .noOcclusion()
-            .randomTicks()
-            .speedFactor(0.3F)
-            .isViewBlocking((state, getter, pos) -> true)
-            .isSuffocating((state, getter, pos) -> true);
 
     public static BlockBehaviour.Properties FARMLAND = BlockBehaviour.Properties.of()
             .randomTicks()
-            .strength(0.6F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.GRAVEL)
             .isViewBlocking((state, getter, pos) -> true)
             .isSuffocating((state, getter, pos) -> true);
 
     public static final BlockBehaviour.Properties PATH = BlockBehaviour.Properties.of()
-            .strength(0.65F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.GRASS)
             .isViewBlocking((state, getter, pos) -> true)
             .isSuffocating((state, getter, pos) -> true);
 
     public static BlockBehaviour.Properties SAND = BlockBehaviour.Properties.of()
-            .strength(1F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.SAND);
 
     public static BlockBehaviour.Properties LEAVES = BlockBehaviour.Properties.of()
-            .strength(0.5F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.GRASS)
             .noOcclusion()
             .isValidSpawn(HMBlockProps::never)
@@ -89,49 +88,30 @@ public class HMBlockProps {
 
     public static BlockBehaviour.Properties CROP = BlockBehaviour.Properties.of()
             .sound(SoundType.CROP)
-            .instabreak()
-            .noCollission()
-            .noOcclusion()
-            .randomTicks();
-
-    public static BlockBehaviour.Properties GROWING_BUSH = BlockBehaviour.Properties.of()
-            .sound(SoundType.SWEET_BERRY_BUSH)
-            .instabreak()
+            .strength(-1F, 3600000.0F)
             .noCollission()
             .noOcclusion()
             .randomTicks();
 
     public static BlockBehaviour.Properties LUMINESCENT_LEAVES = BlockBehaviour.Properties.of()
-            .strength(0.5F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.GRASS)
             .noOcclusion()
             .lightLevel((state) -> 4)
             .requiresCorrectToolForDrops();
 
     public static BlockBehaviour.Properties ICE = BlockBehaviour.Properties.of()
-            .strength(0.5F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.GLASS)
             .noOcclusion()
             .requiresCorrectToolForDrops();
 
-    public static BlockBehaviour.Properties REPLACABLE_PLANT = BlockBehaviour.Properties.of()
-            .instabreak()
-            .sound(SoundType.GRASS)
-            .noCollission()
-            .noOcclusion()
-            .offsetType(BlockBehaviour.OffsetType.XZ);
-
     public static BlockBehaviour.Properties PLANT = BlockBehaviour.Properties.of()
-            .instabreak()
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.GRASS)
             .noCollission()
             .noOcclusion()
             .offsetType(BlockBehaviour.OffsetType.XZ);
-
-    public static BlockBehaviour.Properties LILY_PLANT = BlockBehaviour.Properties.of()
-            .instabreak()
-            .sound(SoundType.GRASS)
-            .noOcclusion();
 
     public static BlockBehaviour.Properties FLOWER = BlockBehaviour.Properties.of()
             .instabreak()
@@ -140,55 +120,38 @@ public class HMBlockProps {
             .noOcclusion()
             .offsetType(BlockBehaviour.OffsetType.XZ);
 
-    public static BlockBehaviour.Properties GLOW_FLOWER = BlockBehaviour.Properties.of()
-            .instabreak()
-            .sound(SoundType.GRASS)
-            .noCollission()
-            .noOcclusion()
-            .lightLevel((state) -> 5)
-            .offsetType(BlockBehaviour.OffsetType.XZ);
-
-    public static BlockBehaviour.Properties CRYSTAL = BlockBehaviour.Properties.of()
-            .sound(SoundType.GLASS)
-            .noCollission()
-            .noOcclusion()
-            .offsetType(BlockBehaviour.OffsetType.XZ);
-
-    public static BlockBehaviour.Properties VINE = BlockBehaviour.Properties.of()
-            .sound(SoundType.GRASS)
-            .noCollission()
-            .noOcclusion()
-            .randomTicks();
-
     public static BlockBehaviour.Properties GRASS = BlockBehaviour.Properties.of()
             .randomTicks()
+            .strength(-1F, 3600000.0F)
             .strength(0.75F)
             .sound(SoundType.GRASS);
 
     public static BlockBehaviour.Properties WOOD = BlockBehaviour.Properties.of()
-            .strength(1F)
+            .strength(-1F, 3600000.0F)
             .sound(SoundType.WOOD);
 
+    public static BlockBehaviour.Properties MODELED_WOOD = BlockBehaviour.Properties.of()
+            .strength(-1F, 3600000.0F)
+            .sound(SoundType.WOOD)
+            .isViewBlocking(HMBlockProps::never)
+            .isSuffocating(HMBlockProps::never)
+            .isValidSpawn(HMBlockProps::never)
+            .noOcclusion();
+
     public static BlockBehaviour.Properties LADDER = BlockBehaviour.Properties.of()
-            .strength(1F)
+            .strength(-1F, 3600000.0F)
             .noOcclusion()
             .dynamicShape()
             .sound(SoundType.WOOD);
 
-    public static BlockBehaviour.Properties CAMPFIRE = BlockBehaviour.Properties.of()
-            .strength(1F)
-            .noOcclusion()
-            .lightLevel((state) -> 10)
-            .sound(SoundType.WOOD);
-
     public static BlockBehaviour.Properties BUTTON = BlockBehaviour.Properties.of()
-            .strength(1F)
+            .strength(-1F, 3600000.0F)
             .noOcclusion()
             .noCollission()
             .sound(SoundType.WOOD);
 
     public static BlockBehaviour.Properties DOOR = BlockBehaviour.Properties.of()
-            .strength(3F)
+            .strength(-1F, 3600000.0F)
             .noOcclusion()
             .dynamicShape()
             .sound(SoundType.WOOD);
@@ -197,7 +160,7 @@ public class HMBlockProps {
             .sound(SoundType.STONE)
             .requiresCorrectToolForDrops()
             .lightLevel(litBlockEmission(13))
-            .strength(1.5F, 6.0F);
+            .strength(-1F, 3600000.0F);
 
     public static String getTextureFromName(String name) {
         String texName = "";

@@ -7,172 +7,105 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.sham.hmfomt.common.packet.PacketPlayerStats;
 import net.sham.hmfomt.core.data.HMNetworkRegistry;
-import net.sham.hmfomt.core.data.enums.EnumSprites;
 import net.sham.hmfomt.core.data.enums.EnumTools;
 import org.jetbrains.annotations.UnknownNullability;
 
 public class PlayerStats implements INBTSerializable<CompoundTag> {
 
     private int coin;
-    private float HOE_COPPER_XP, HOE_SILVER_XP, HOE_GOLD_XP, HOE_MYTHRIL_XP;
-    private float SICKLE_COPPER_XP, SICKLE_SILVER_XP, SICKLE_GOLD_XP, SICKLE_MYTHRIL_XP;
-    private float AXE_COPPER_XP, AXE_SILVER_XP, AXE_GOLD_XP, AXE_MYTHRIL_XP;
-    private float HAMMER_COPPER_XP, HAMMER_SILVER_XP, HAMMER_GOLD_XP, HAMMER_MYTHRIL_XP;
-    private float WATERING_CAN_COPPER_XP, WATERING_CAN_SILVER_XP, WATERING_CAN_GOLD_XP, WATERING_CAN_MYTHRIL_XP;
-    private float FISHING_ROD_COPPER_XP, FISHING_ROD_SILVER_XP, FISHING_ROD_GOLD_XP, FISHING_ROD_MYTHRIL_XP;
+    private boolean JUST_WOKE;
+
+    private float HOE_XP, SICKLE_XP, AXE_XP, HAMMER_XP, WATERING_CAN_XP, FISHING_ROD_XP;
+    private int HOE_LEVEL, SICKLE_LEVEL, AXE_LEVEL, HAMMER_LEVEL, WATERING_CAN_LEVEL, FISHING_ROD_LEVEL;
 
     public void copyFrom(PlayerStats stats) {
         this.coin = stats.coin;
         for(EnumTools t : EnumTools.values()) {
-            setCopperXP(t, stats.getCopperXP(t));
-            setSilverXP(t, stats.getSilverXP(t));
-            setGoldXP(t, stats.getGoldXP(t));
-            setMythrilXP(t, stats.getMythrilXP(t));
+            setXP(t, stats.getXP(t));
+            setLevel(t, stats.getLevel(t));
         }
+        this.JUST_WOKE = stats.JUST_WOKE;
     }
 
-    public void addCopperXP(EnumTools tool, float amount, ServerPlayer player) {
-        switch(tool) {
-            case HOE -> HOE_COPPER_XP = HOE_COPPER_XP + amount;
-            case SICKLE -> SICKLE_COPPER_XP = SICKLE_COPPER_XP + amount;
-            case AXE -> AXE_COPPER_XP = AXE_COPPER_XP + amount;
-            case HAMMER -> HAMMER_COPPER_XP = HAMMER_COPPER_XP + amount;
-            case WATERING_CAN -> WATERING_CAN_COPPER_XP = WATERING_CAN_COPPER_XP + amount;
-            case FISHING_ROD -> FISHING_ROD_COPPER_XP = FISHING_ROD_COPPER_XP + amount;
+    public void setWoke(boolean woke) {
+        this.JUST_WOKE = woke;
+    }
+
+    public boolean getJustWoke() {
+        return JUST_WOKE;
+    }
+
+    public int getLevelCapacity() {
+        return 150;
+    }
+
+    public void addXP(EnumTools tool, float amount, Player player) {
+        if(getXP(tool) + amount >= getLevelCapacity()) {
+            setXP(tool, getXP(tool) + amount - getLevelCapacity());
+            addLevel(tool,1);
+        } else {
+            setXP(tool, getXP(tool) + amount);
         }
         sendPacket(tool, player);
     }
 
-    public void setCopperXP(EnumTools tool, float amount) {
+    public void setXP(EnumTools tool, float amount) {
         switch(tool) {
-            case HOE -> HOE_COPPER_XP = amount;
-            case SICKLE -> SICKLE_COPPER_XP = amount;
-            case AXE -> AXE_COPPER_XP = amount;
-            case HAMMER -> HAMMER_COPPER_XP = amount;
-            case WATERING_CAN -> WATERING_CAN_COPPER_XP = amount;
-            case FISHING_ROD -> FISHING_ROD_COPPER_XP = amount;
+            case HOE -> HOE_XP = amount;
+            case SICKLE -> SICKLE_XP = amount;
+            case AXE -> AXE_XP = amount;
+            case HAMMER -> HAMMER_XP = amount;
+            case WATERING_CAN -> WATERING_CAN_XP = amount;
+            case FISHING_ROD -> FISHING_ROD_XP = amount;
         }
     }
 
-    public float getCopperXP(EnumTools tool) {
+    public float getXP(EnumTools tool) {
         float XP = 0.0F;
         switch(tool) {
-            case HOE -> XP = HOE_COPPER_XP;
-            case SICKLE -> XP = SICKLE_COPPER_XP;
-            case AXE -> XP = AXE_COPPER_XP;
-            case HAMMER -> XP = HAMMER_COPPER_XP;
-            case WATERING_CAN -> XP = WATERING_CAN_COPPER_XP;
-            case FISHING_ROD -> XP = FISHING_ROD_COPPER_XP;
+            case HOE -> XP = HOE_XP;
+            case SICKLE -> XP = SICKLE_XP;
+            case AXE -> XP = AXE_XP;
+            case HAMMER -> XP = HAMMER_XP;
+            case WATERING_CAN -> XP = WATERING_CAN_XP;
+            case FISHING_ROD -> XP = FISHING_ROD_XP;
         }
         return XP;
     }
 
-    public void addSilverXP(EnumTools tool, float amount, ServerPlayer player) {
+    public void addLevel(EnumTools tool, int amount) {
         switch(tool) {
-            case HOE -> HOE_SILVER_XP = HOE_SILVER_XP + amount;
-            case SICKLE -> SICKLE_SILVER_XP = SICKLE_SILVER_XP + amount;
-            case AXE -> AXE_SILVER_XP = AXE_SILVER_XP + amount;
-            case HAMMER -> HAMMER_SILVER_XP = HAMMER_SILVER_XP + amount;
-            case WATERING_CAN -> WATERING_CAN_SILVER_XP = WATERING_CAN_SILVER_XP + amount;
-            case FISHING_ROD -> FISHING_ROD_SILVER_XP = FISHING_ROD_SILVER_XP + amount;
-        }
-        sendPacket(tool, player);
-    }
-
-    public void setSilverXP(EnumTools tool, float amount) {
-        switch(tool) {
-            case HOE -> HOE_SILVER_XP = amount;
-            case SICKLE -> SICKLE_SILVER_XP = amount;
-            case AXE -> AXE_SILVER_XP = amount;
-            case HAMMER -> HAMMER_SILVER_XP = amount;
-            case WATERING_CAN -> WATERING_CAN_SILVER_XP = amount;
-            case FISHING_ROD -> FISHING_ROD_SILVER_XP = amount;
+            case HOE -> HOE_LEVEL = HOE_LEVEL + amount;
+            case SICKLE -> SICKLE_LEVEL = SICKLE_LEVEL + amount;
+            case AXE -> AXE_LEVEL = AXE_LEVEL + amount;
+            case HAMMER -> HAMMER_LEVEL = HAMMER_LEVEL + amount;
+            case WATERING_CAN -> WATERING_CAN_LEVEL = WATERING_CAN_LEVEL + amount;
+            case FISHING_ROD -> FISHING_ROD_LEVEL = FISHING_ROD_LEVEL + amount;
         }
     }
 
-    public float getSilverXP(EnumTools tool) {
-        float XP = 0.0F;
+    public void setLevel(EnumTools tool, int amount) {
         switch(tool) {
-            case HOE -> XP = HOE_SILVER_XP;
-            case SICKLE -> XP = SICKLE_SILVER_XP;
-            case AXE -> XP = AXE_SILVER_XP;
-            case HAMMER -> XP = HAMMER_SILVER_XP;
-            case WATERING_CAN -> XP = WATERING_CAN_SILVER_XP;
-            case FISHING_ROD -> XP = FISHING_ROD_SILVER_XP;
-        }
-        return XP;
-    }
-
-    public void addGoldXP(EnumTools tool, float amount, ServerPlayer player) {
-        switch(tool) {
-            case HOE -> HOE_GOLD_XP = HOE_GOLD_XP + amount;
-            case SICKLE -> SICKLE_GOLD_XP = SICKLE_GOLD_XP + amount;
-            case AXE -> AXE_GOLD_XP = AXE_GOLD_XP + amount;
-            case HAMMER -> HAMMER_GOLD_XP = HAMMER_GOLD_XP + amount;
-            case WATERING_CAN -> WATERING_CAN_GOLD_XP = WATERING_CAN_GOLD_XP + amount;
-            case FISHING_ROD -> FISHING_ROD_GOLD_XP = FISHING_ROD_GOLD_XP + amount;
-        }
-        sendPacket(tool, player);
-    }
-
-    public void setGoldXP(EnumTools tool, float amount) {
-        switch(tool) {
-            case HOE -> HOE_GOLD_XP = amount;
-            case SICKLE -> SICKLE_GOLD_XP = amount;
-            case AXE -> AXE_GOLD_XP = amount;
-            case HAMMER -> HAMMER_GOLD_XP = amount;
-            case WATERING_CAN -> WATERING_CAN_GOLD_XP = amount;
-            case FISHING_ROD -> FISHING_ROD_GOLD_XP = amount;
+            case HOE -> HOE_LEVEL = amount;
+            case SICKLE -> SICKLE_LEVEL = amount;
+            case AXE -> AXE_LEVEL = amount;
+            case HAMMER -> HAMMER_LEVEL = amount;
+            case WATERING_CAN -> WATERING_CAN_LEVEL = amount;
+            case FISHING_ROD -> FISHING_ROD_LEVEL = amount;
         }
     }
 
-    public float getGoldXP(EnumTools tool) {
-        float XP = 0.0F;
+    public int getLevel(EnumTools tool) {
+        int level = 0;
         switch(tool) {
-            case HOE -> XP = HOE_GOLD_XP;
-            case SICKLE -> XP = SICKLE_GOLD_XP;
-            case AXE -> XP = AXE_GOLD_XP;
-            case HAMMER -> XP = HAMMER_GOLD_XP;
-            case WATERING_CAN -> XP = WATERING_CAN_GOLD_XP;
-            case FISHING_ROD -> XP = FISHING_ROD_GOLD_XP;
+            case HOE -> level = HOE_LEVEL;
+            case SICKLE -> level = SICKLE_LEVEL;
+            case AXE -> level = AXE_LEVEL;
+            case HAMMER -> level = HAMMER_LEVEL;
+            case WATERING_CAN -> level = WATERING_CAN_LEVEL;
+            case FISHING_ROD -> level = FISHING_ROD_LEVEL;
         }
-        return XP;
-    }
-
-    public void addMythrilXP(EnumTools tool, float amount, ServerPlayer player) {
-        switch(tool) {
-            case HOE -> HOE_MYTHRIL_XP = HOE_MYTHRIL_XP + amount;
-            case SICKLE -> SICKLE_MYTHRIL_XP = SICKLE_MYTHRIL_XP + amount;
-            case AXE -> AXE_MYTHRIL_XP = AXE_MYTHRIL_XP + amount;
-            case HAMMER -> HAMMER_MYTHRIL_XP = HAMMER_MYTHRIL_XP + amount;
-            case WATERING_CAN -> WATERING_CAN_MYTHRIL_XP = WATERING_CAN_MYTHRIL_XP + amount;
-            case FISHING_ROD -> FISHING_ROD_MYTHRIL_XP = FISHING_ROD_MYTHRIL_XP + amount;
-        }
-        sendPacket(tool, player);
-    }
-
-    public void setMythrilXP(EnumTools tool, float amount) {
-        switch(tool) {
-            case HOE -> HOE_MYTHRIL_XP = amount;
-            case SICKLE -> SICKLE_MYTHRIL_XP = amount;
-            case AXE -> AXE_MYTHRIL_XP = amount;
-            case HAMMER -> HAMMER_MYTHRIL_XP = amount;
-            case WATERING_CAN -> WATERING_CAN_MYTHRIL_XP = amount;
-            case FISHING_ROD -> FISHING_ROD_MYTHRIL_XP = amount;
-        }
-    }
-
-    public float getMythrilXP(EnumTools tool) {
-        float XP = 0.0F;
-        switch(tool) {
-            case HOE -> XP = HOE_MYTHRIL_XP;
-            case SICKLE -> XP = SICKLE_MYTHRIL_XP;
-            case AXE -> XP = AXE_MYTHRIL_XP;
-            case HAMMER -> XP = HAMMER_MYTHRIL_XP;
-            case WATERING_CAN -> XP = WATERING_CAN_MYTHRIL_XP;
-            case FISHING_ROD -> XP = FISHING_ROD_MYTHRIL_XP;
-        }
-        return XP;
+        return level;
     }
 
     public int getCoins(){
@@ -198,103 +131,74 @@ public class PlayerStats implements INBTSerializable<CompoundTag> {
 
     public void sendPacket(EnumTools tool, Player player) {
         if(player instanceof ServerPlayer sp) {
-            HMNetworkRegistry.sendToPlayer(sp, new PacketPlayerStats(getCoins(), getCopperXP(tool), getSilverXP(tool), getGoldXP(tool), getMythrilXP(tool), tool));
+            HMNetworkRegistry.sendToPlayer(sp, new PacketPlayerStats(getCoins(), getJustWoke(), getXP(tool), getLevel(tool), tool));
         }
     }
 
     public void update(Player player) {
         for(EnumTools tool : EnumTools.values()) {
+            if(getXP(tool) >= 150) {
+                setXP(tool, 150);
+            }
+
+            if(getLevel(tool) >= 4) {
+                setLevel(tool, 4);
+                setXP(tool, 150);
+            }
+//            setXP(tool, 0);
+//            setLevel(tool, 0);
             sendPacket(tool, player);
-
-            if(getCopperXP(tool)  >= 150) {
-                setCopperXP(tool, 150);
-            }
-
-            if(getSilverXP(tool)  >= 150) {
-                setSilverXP(tool, 150);
-            }
-
-            if(getGoldXP(tool)  >= 150) {
-                setGoldXP(tool, 150);
-            }
-
-            if(getMythrilXP(tool)  >= 150) {
-                setMythrilXP(tool, 150);
-            }
         }
     }
-
 
     @Override
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
 
         tag.putInt("sentacoins", this.coin);
+        tag.putBoolean("woke", this.JUST_WOKE);
 
-        tag.putFloat("hoe_copper", this.HOE_COPPER_XP);
-        tag.putFloat("hoe_silver", this.HOE_SILVER_XP);
-        tag.putFloat("hoe_gold", this.HOE_GOLD_XP);
-        tag.putFloat("hoe_mythril", this.HOE_MYTHRIL_XP);
+        tag.putFloat("hoe", this.HOE_XP);
+        tag.putInt("hoe_level", this.HOE_LEVEL);
 
-        tag.putFloat("sickle_copper", this.SICKLE_COPPER_XP);
-        tag.putFloat("sickle_silver", this.SICKLE_SILVER_XP);
-        tag.putFloat("sickle_gold", this.SICKLE_GOLD_XP);
-        tag.putFloat("sickle_mythril", this.SICKLE_MYTHRIL_XP);
+        tag.putFloat("sickle", this.SICKLE_XP);
+        tag.putInt("sickle_level", this.SICKLE_LEVEL);
 
-        tag.putFloat("axe_copper", this.AXE_COPPER_XP);
-        tag.putFloat("axe_silver", this.AXE_SILVER_XP);
-        tag.putFloat("axe_gold", this.AXE_GOLD_XP);
-        tag.putFloat("axe_mythril", this.AXE_MYTHRIL_XP);
+        tag.putFloat("axe", this.AXE_XP);
+        tag.putInt("axe_level", this.AXE_LEVEL);
 
-        tag.putFloat("hammer_copper", this.HAMMER_COPPER_XP);
-        tag.putFloat("hammer_silver", this.HAMMER_SILVER_XP);
-        tag.putFloat("hammer_gold", this.HAMMER_GOLD_XP);
-        tag.putFloat("hammer_mythril", this.HAMMER_MYTHRIL_XP);
+        tag.putFloat("hammer", this.HAMMER_XP);
+        tag.putInt("hammer_level", this.HAMMER_LEVEL);
 
-        tag.putFloat("watering_can_copper", this.WATERING_CAN_COPPER_XP);
-        tag.putFloat("watering_can_silver", this.WATERING_CAN_SILVER_XP);
-        tag.putFloat("watering_can_gold", this.WATERING_CAN_GOLD_XP);
-        tag.putFloat("watering_can_mythril", this.WATERING_CAN_MYTHRIL_XP);
+        tag.putFloat("watering_can", this.WATERING_CAN_XP);
+        tag.putInt("watering_can_level", this.WATERING_CAN_LEVEL);
 
-        tag.putFloat("fishing_rod_copper", this.FISHING_ROD_COPPER_XP);
-        tag.putFloat("fishing_rod_silver", this.FISHING_ROD_SILVER_XP);
-        tag.putFloat("fishing_rod_gold", this.FISHING_ROD_GOLD_XP);
-        tag.putFloat("fishing_rod_mythril", this.FISHING_ROD_MYTHRIL_XP);
+        tag.putFloat("fishing_rod", this.FISHING_ROD_XP);
+        tag.putInt("fishing_rod_level", this.FISHING_ROD_LEVEL);
         return tag;
     }
 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
         coin = tag.getInt("sentacoins");
+        JUST_WOKE = tag.getBoolean("woke");
 
-        HOE_COPPER_XP = tag.getInt("hoe_copper");
-        HOE_SILVER_XP = tag.getInt("hoe_silver");
-        HOE_GOLD_XP = tag.getInt("hoe_gold");
-        HOE_MYTHRIL_XP = tag.getInt("hoe_mythril");
+        HOE_XP = tag.getFloat("hoe");
+        HOE_LEVEL = tag.getInt("hoe_level");
 
-        SICKLE_COPPER_XP = tag.getInt("sickle_copper");
-        SICKLE_SILVER_XP = tag.getInt("sickle_silver");
-        SICKLE_GOLD_XP = tag.getInt("sickle_gold");
-        SICKLE_MYTHRIL_XP = tag.getInt("sickle_mythril");
+        SICKLE_XP = tag.getFloat("sickle");
+        SICKLE_LEVEL = tag.getInt("sickle_level");
 
-        AXE_COPPER_XP = tag.getInt("axe_copper");
-        AXE_SILVER_XP = tag.getInt("axe_silver");
-        AXE_GOLD_XP = tag.getInt("axe_gold");
-        AXE_MYTHRIL_XP = tag.getInt("axe_mythril");
+        AXE_XP = tag.getFloat("axe");
+        AXE_LEVEL = tag.getInt("axe_level");
 
-        HAMMER_COPPER_XP = tag.getInt("hammer_copper");
-        HAMMER_SILVER_XP = tag.getInt("hammer_silver");
-        HAMMER_GOLD_XP = tag.getInt("hammer_gold");
-        HAMMER_MYTHRIL_XP = tag.getInt("hammer_mythril");
+        HAMMER_XP = tag.getFloat("hammer");
+        HAMMER_LEVEL = tag.getInt("hammer_level");
 
-        WATERING_CAN_COPPER_XP = tag.getInt("watering_can_copper");
-        WATERING_CAN_SILVER_XP = tag.getInt("watering_can_silver");
-        WATERING_CAN_GOLD_XP = tag.getInt("watering_can_gold");
-        WATERING_CAN_MYTHRIL_XP = tag.getInt("watering_can_mythril");
+        WATERING_CAN_XP = tag.getFloat("watering_can");
+        WATERING_CAN_LEVEL = tag.getInt("watering_can_level");
 
-        FISHING_ROD_COPPER_XP = tag.getInt("fishing_rod_copper");
-        FISHING_ROD_SILVER_XP = tag.getInt("fishing_rod_silver");
-        FISHING_ROD_GOLD_XP = tag.getInt("fishing_rod_gold");
-        FISHING_ROD_MYTHRIL_XP = tag.getInt("fishing_rod_mythril");
+        FISHING_ROD_XP = tag.getFloat("fishing_rod");
+        FISHING_ROD_LEVEL = tag.getInt("fishing_rod_level");
     }
 }

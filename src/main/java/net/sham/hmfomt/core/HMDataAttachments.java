@@ -6,6 +6,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.sham.hmfomt.common.capability.HarvestSprites;
 import net.sham.hmfomt.common.capability.PlayerStats;
+import net.sham.hmfomt.common.capability.WorldEvents;
 
 public class HMDataAttachments {
 
@@ -16,4 +17,7 @@ public class HMDataAttachments {
 
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<HarvestSprites>> HARVEST_SPRITES = REGISTRY.register(
             "harvest_sprites", () -> AttachmentType.serializable(HarvestSprites::new).build());
+
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<WorldEvents>> WORLD_EVENTS = REGISTRY.register(
+            "world_events", () -> AttachmentType.serializable(WorldEvents::new).build());
 }

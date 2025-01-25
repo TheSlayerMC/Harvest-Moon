@@ -49,6 +49,7 @@ public class HarvestMoon {
         HMDataAttachments.REGISTRY.register(modEventBus);
         HMNetworkRegistry.init(modEventBus);
         HMContainers.REGISTRY.register(modEventBus);
+        HMBlockEntities.REGISTRY.register(modEventBus);
 
         if(DEV_MODE) {
             new LangRegistry().generate();
@@ -61,6 +62,7 @@ public class HarvestMoon {
             new JBlockPathGenerator().generate();
             new JBlockSlabGenerator().generate();
             new JBlockStairsGenerator().generate();
+            new JBlockModelGenerator().generate();
             new JItemGenerator().generate();
         }
 

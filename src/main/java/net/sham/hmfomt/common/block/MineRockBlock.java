@@ -1,8 +1,6 @@
 package net.sham.hmfomt.common.block;
 
-import net.minecraft.world.level.block.Block;
-
-public class MineRockBlock extends Block {
+public class MineRockBlock extends ModeledBlock {
 
     private final MineRockBlock.Tier tier;
 

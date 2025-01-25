@@ -8,6 +8,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.sham.hmfomt.common.packet.PacketPlayerStats;
 import net.sham.hmfomt.common.packet.PacketSprites;
+import net.sham.hmfomt.common.packet.PacketWorldEvents;
 import net.sham.hmfomt.core.HarvestMoon;
 
 public class HMNetworkRegistry {
@@ -21,6 +22,7 @@ public class HMNetworkRegistry {
 
         registry.playBidirectional(PacketPlayerStats.TYPE, PacketPlayerStats.STREAM_CODEC, PacketPlayerStats::handle);
         registry.playBidirectional(PacketSprites.TYPE, PacketSprites.STREAM_CODEC, PacketSprites::handle);
+        registry.playBidirectional(PacketWorldEvents.TYPE, PacketWorldEvents.STREAM_CODEC, PacketWorldEvents::handle);
     }
 
     public static void sendToPlayer(ServerPlayer player, CustomPacketPayload packet) {

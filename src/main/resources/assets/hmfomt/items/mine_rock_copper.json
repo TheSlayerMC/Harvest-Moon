@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "hmfomt:block/mine_rock_copper"
+    "model": "hmfomt:item/mine_rock_copper"
   }
 }

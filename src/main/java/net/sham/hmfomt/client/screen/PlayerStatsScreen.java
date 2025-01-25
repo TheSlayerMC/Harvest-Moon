@@ -17,6 +17,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.sham.hmfomt.client.ClientHelper;
+import net.sham.hmfomt.client.stats.ClientPlayerStats;
 import net.sham.hmfomt.common.capability.HarvestSprites;
 import net.sham.hmfomt.common.capability.PlayerStats;
 import net.sham.hmfomt.common.container.EmptyContainer;
@@ -92,6 +94,7 @@ public class PlayerStatsScreen extends AbstractContainerScreen<EmptyContainer> {
         int x = 0;
         int h = 40;
         drawCenteredStringWithCustomScale(stack, font, Component.translatable("Your Property"), x + 320, h + 28, 0, EnumHexColor.BLACK, 1.5F, h);
+        drawCenteredStringWithCustomScale(stack, font, Component.translatable("Time: " + ClientHelper.formatTime(this.minecraft.player.level().dayTime())), x + 320, h + 75, 0, EnumHexColor.BLACK, 1.5F, h);
 
     }
 
@@ -111,7 +114,6 @@ public class PlayerStatsScreen extends AbstractContainerScreen<EmptyContainer> {
         drawHarvestSprite(stack, x + 120, h, EnumSprites.TIMID);
         h += height;
         drawHarvestSprite(stack, x, h, EnumSprites.CHEF);
-
     }
 
     public void toolPage(GuiGraphics stack) {
@@ -182,30 +184,36 @@ public class PlayerStatsScreen extends AbstractContainerScreen<EmptyContainer> {
         int l = (height - imageHeight) / 2;
         RenderSystem.setShaderTexture(0, this.STAT_SPRITES);
         if(player != null) {
+
             PlayerStats stats = player.getData(HMDataAttachments.PLAYER_STATS);
-            int copperWidth = (int)stats.getCopperXP(type);
-            int silverWidth = (int)stats.getSilverXP(type);
-            int goldWidth = (int)stats.getGoldXP(type);
-            int mythrilWidth = (int)stats.getMythrilXP(type);
-
+            int experience = (int)ClientPlayerStats.getClientXP(type);
+            int level = ClientPlayerStats.getClientLevel(type);
             int progressBarX = k + x + 25, progressBarY = l + y;
+
             matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 2, progressBarSize, 7, 256, 256);
-            matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 11, copperWidth, 7, 256, 256);
-            matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 20, silverWidth, 7, 256, 256);
-            matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 28, goldWidth, 7, 256, 256);
-            matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 36, mythrilWidth, 7, 256, 256);
 
-            progressBarY += 8;
-            if(copperWidth >= 150) {
-                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 45, 8, 8, 256, 256);
+            matrixStack.drawString(minecraft.font, "Lv: " + ClientPlayerStats.getClientLevel(type), progressBarX + 165, progressBarY, ArgbColor.from(ChatFormatting.BLACK), false);
+
+            if(level == 0) {
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 11, experience, 7, 256, 256);
             }
+            if(level >= 1) {
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 11, progressBarSize, 7, 256, 256);
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 20, experience, 7, 256, 256);
 
-            if(silverWidth >= 150) {
-                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX + 9, progressBarY, 11, 45, 8, 8, 256, 256);
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY + 8, 2, 45, 8, 8, 256, 256);
             }
+            if(level >= 2) {
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 20, progressBarSize, 7, 256, 256);
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 28, experience, 7, 256, 256);
 
-            if(goldWidth >= 150) {
-                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX + 18, progressBarY, 20, 45, 8, 8, 256, 256);
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX + 9, progressBarY + 8, 11, 45, 8, 8, 256, 256);
+            }
+            if(level >= 3) {
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 28, progressBarSize, 7, 256, 256);
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX, progressBarY, 2, 36, experience, 7, 256, 256);
+
+                matrixStack.blit(RenderType::guiTextured, STAT_SPRITES, progressBarX + 18, progressBarY + 8, 20, 45, 8, 8, 256, 256);
             }
         }
     }

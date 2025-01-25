@@ -3,6 +3,7 @@ package net.sham.hmfomt.core;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.*;
@@ -57,17 +58,22 @@ public class HMBlocks {
 
     public static final DeferredBlock<Block> TOWN_BRICKS = register("town_bricks", "Town Bricks", HMBlockProps.STONE);
 
-    public static final DeferredBlock<Block> BASIC_MINE_ROCK = registerModeledBlock("mine_rock_basic", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.LOW), HMBlockProps.STONE);
-    public static final DeferredBlock<Block> COPPER_MINE_ROCK = registerModeledBlock("mine_rock_copper", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.LOW), HMBlockProps.STONE);
-    public static final DeferredBlock<Block> SILVER_MINE_ROCK = registerModeledBlock("mine_rock_silver", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.LOW), HMBlockProps.STONE);
-    public static final DeferredBlock<Block> GOLD_MINE_ROCK = registerModeledBlock("mine_rock_gold", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.LOW), HMBlockProps.STONE);
-    public static final DeferredBlock<Block> MYTHRIL_MINE_ROCK = registerModeledBlock("mine_rock_mythril", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.LOW), HMBlockProps.STONE);
+    public static final DeferredBlock<Block> BASIC_MINE_ROCK = registerModeledBlock("mine_rock_basic", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.LOW), HMBlockProps.MODELED_STONE);
+    public static final DeferredBlock<Block> COPPER_MINE_ROCK = registerModeledBlock("mine_rock_copper", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.COPPER), HMBlockProps.MODELED_STONE);
+    public static final DeferredBlock<Block> SILVER_MINE_ROCK = registerModeledBlock("mine_rock_silver", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.SILVER), HMBlockProps.MODELED_STONE);
+    public static final DeferredBlock<Block> GOLD_MINE_ROCK = registerModeledBlock("mine_rock_gold", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.GOLD), HMBlockProps.MODELED_STONE);
+    public static final DeferredBlock<Block> MYTHRIL_MINE_ROCK = registerModeledBlock("mine_rock_mythril", "Mine Rock", (p) -> new MineRockBlock(p, MineRockBlock.Tier.MYTHRIL), HMBlockProps.MODELED_STONE);
 
     public static final DeferredBlock<Block> BLUE_GRASS = registerCrossBlock("blue_grass", "Blue Grass", TallGrassBlock::new, HMBlockProps.FLOWER);
     public static final DeferredBlock<Block> YELLOW_GRASS = registerCrossBlock("yellow_grass", "Yellow Grass", TallGrassBlock::new, HMBlockProps.FLOWER);
     public static final DeferredBlock<Block> ORANGE_GRASS = registerCrossBlock("orange_grass", "Orange Grass", TallGrassBlock::new, HMBlockProps.FLOWER);
     public static final DeferredBlock<Block> GREEN_GRASS = registerCrossBlock("green_grass", "Green Grass", TallGrassBlock::new, HMBlockProps.FLOWER);
     public static final DeferredBlock<Block> WEEDS = registerCrossBlock("weeds", "Weeds", TallGrassBlock::new, HMBlockProps.FLOWER);
+
+    public static final DeferredBlock<Block> YARD_ROCK = registerModeledBlock("yard_rock", "Rock", ModeledBlock::new, HMBlockProps.MODELED_STONE);
+    public static final DeferredBlock<Block> YARD_WOOD = registerModeledBlock("yard_wood", "Wood", ModeledBlock::new, HMBlockProps.MODELED_WOOD);
+
+    public static final DeferredBlock<Block> PLAYER_BED = register("player_bed", "Bed", PlayerBedBlock::new, HMBlockProps.WOOL);
 
     public static final DeferredBlock<Block> FARMLAND = registerFarmlandBlock("farmland", "Farmland", FarmlandBlock::new, HMBlockProps.FARMLAND);
     public static final DeferredBlock<Block> SOIL = register("soil", "Soil", Block::new, HMBlockProps.DIRT);

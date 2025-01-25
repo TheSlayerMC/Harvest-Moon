@@ -9,32 +9,30 @@ import net.sham.hmfomt.client.stats.ClientPlayerStats;
 import net.sham.hmfomt.core.HarvestMoon;
 import net.sham.hmfomt.core.data.enums.EnumTools;
 
-public record PacketPlayerStats(int sentacoins, float copper, float silver, float gold, float mythril, EnumTools tools) implements CustomPacketPayload {
+public record PacketPlayerStats(int sentacoins, boolean woke, float xp, int level, EnumTools tools) implements CustomPacketPayload {
 
     public static final Type<PacketPlayerStats> TYPE = new Type<>(HarvestMoon.rl("player_stats"));
 
     public static PacketPlayerStats decode(FriendlyByteBuf buffer) {
-        return new PacketPlayerStats(buffer.readInt(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readEnum(EnumTools.class));
+        return new PacketPlayerStats(buffer.readInt(), buffer.readBoolean(), buffer.readFloat(), buffer.readInt(), buffer.readEnum(EnumTools.class));
     }
 
     public static final StreamCodec<RegistryFriendlyByteBuf, PacketPlayerStats> STREAM_CODEC = CustomPacketPayload.codec(PacketPlayerStats::write, PacketPlayerStats::decode);
 
     private void write(FriendlyByteBuf buf) {
         buf.writeInt(sentacoins);
-        buf.writeFloat(copper);
-        buf.writeFloat(silver);
-        buf.writeFloat(gold);
-        buf.writeFloat(mythril);
+        buf.writeBoolean(woke);
+        buf.writeFloat(xp);
+        buf.writeInt(level);
         buf.writeEnum(tools);
     }
 
     public static void handle(PacketPlayerStats payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             ClientPlayerStats.setSentacoins(payload.sentacoins);
-            ClientPlayerStats.setClientCopperXP(payload.tools, payload.copper);
-            ClientPlayerStats.setClientSilverXP(payload.tools, payload.silver);
-            ClientPlayerStats.setClientGoldXP(payload.tools, payload.gold);
-            ClientPlayerStats.setClientMythrilXP(payload.tools, payload.mythril);
+            ClientPlayerStats.setWoke(payload.woke);
+            ClientPlayerStats.setClientXP(payload.tools, payload.xp);
+            ClientPlayerStats.setClientLevel(payload.tools, payload.level);
         });
     }
 

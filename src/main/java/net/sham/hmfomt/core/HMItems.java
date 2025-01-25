@@ -27,10 +27,13 @@ public class HMItems {
     public static final DeferredItem<Item> HAMMER = registerNormalItem("hammer", "Hammer", HammerItem::new);
     public static final DeferredItem<Item> HOE = registerNormalItem("hoe", "Hoe", HoeItem::new);
     public static final DeferredItem<Item> SICKLE = registerNormalItem("sickle", "Sickle", SickleItem::new);
+    public static final DeferredItem<Item> AXE = registerNormalItem("axe", "Axe", AxeItem::new);
+    public static final DeferredItem<Item> FISHING_ROD = registerNormalItem("fishing_rod", "Fishing Rod", FishingRodItem::new);
 
     public static final DeferredItem<Item> BREAD = registerNormalItem("bread", "Bread", HMItem::new);
     public static final DeferredItem<Item> RICE_BALLS = registerNormalItem("rice_balls", "Rice Balls", HMItem::new);
     public static final DeferredItem<Item> CURRY_POWDER = registerNormalItem("curry_powder", "Curry Powder", HMItem::new);
+
     public static final DeferredItem<Item> FLOUR = registerNormalItem("flour", "Flour", HMItem::new);
     public static final DeferredItem<Item> OIL = registerNormalItem("oil", "Oil", HMItem::new);
     public static final DeferredItem<Item> CHOCOLATE = registerNormalItem("chocolate", "Chocolate", HMItem::new);

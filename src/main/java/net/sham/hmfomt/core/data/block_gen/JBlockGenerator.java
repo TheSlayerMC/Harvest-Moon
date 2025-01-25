@@ -45,10 +45,6 @@ public class JBlockGenerator extends BasicFileGenerator {
 
             writerInit();
         }
-
-        for(String name : HMBlocks.modelBlockName) {
-            generateBasicFile(name);
-        }
     }
 
     public void getBlockItem(String modID, String name) {

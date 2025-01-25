@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hmfomt:item/mine_rock_basic"
+  }
+}

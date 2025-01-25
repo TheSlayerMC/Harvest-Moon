@@ -14,14 +14,11 @@ import net.minecraft.world.level.block.piston.MovingPistonBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.common.FarmlandWaterManager;
 import net.sham.hmfomt.core.HMBlocks;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,6 +69,9 @@ public class FarmlandBlock extends Block {
     public void tick(BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
         if(!pState.canSurvive(pLevel, pPos))
             turnToDirt(pState, pLevel, pPos);
+        if(pLevel.isRaining()) {
+            pState.setValue(MOISTURE, true);
+        }
     }
 
     @Override
@@ -85,6 +85,9 @@ public class FarmlandBlock extends Block {
             }
         } else if(!i) {
             pLevel.setBlock(pPos, pState.setValue(MOISTURE, true), 2);
+        }
+        if(pLevel.isRaining()) {
+            pState.setValue(MOISTURE, true);
         }
     }
 

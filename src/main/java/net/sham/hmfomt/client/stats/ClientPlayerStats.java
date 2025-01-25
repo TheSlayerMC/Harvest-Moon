@@ -2,7 +2,6 @@ package net.sham.hmfomt.client.stats;
 
 import net.minecraft.client.Minecraft;
 import net.sham.hmfomt.core.HMDataAttachments;
-import net.sham.hmfomt.core.data.enums.EnumSprites;
 import net.sham.hmfomt.core.data.enums.EnumTools;
 
 public class ClientPlayerStats {
@@ -27,43 +26,28 @@ public class ClientPlayerStats {
         Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).setCoins(value);
     }
 
-    public static void setClientCopperXP(EnumTools tool, float value) {
+    public static void setWoke(boolean value) {
         assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).setCopperXP(tool, value);
+        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).setWoke(value);
     }
 
-    public static void setClientSilverXP(EnumTools tool, float value) {
+    public static void setClientXP(EnumTools tool, float value) {
         assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).setSilverXP(tool, value);
+        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).setXP(tool, value);
     }
 
-    public static void setClientGoldXP(EnumTools tool, float value) {
+    public static void setClientLevel(EnumTools tool, int value) {
         assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).setGoldXP(tool, value);
+        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).setLevel(tool, value);
     }
 
-    public static void setClientMythrilXP(EnumTools tool, float value) {
+    public static float getClientXP(EnumTools tool) {
         assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).setMythrilXP(tool, value);
+        return Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).getXP(tool);
     }
 
-    public static void getClientCopperXP(EnumTools tool) {
+    public static int getClientLevel(EnumTools tool) {
         assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).getCopperXP(tool);
-    }
-
-    public static void getClientSilverXP(EnumTools tool) {
-        assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).getSilverXP(tool);
-    }
-
-    public static void getClientGoldXP(EnumTools tool) {
-        assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).getGoldXP(tool);
-    }
-
-    public static void getClientMythrilXP(EnumTools tool) {
-        assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).getMythrilXP(tool);
+        return Minecraft.getInstance().player.getData(HMDataAttachments.PLAYER_STATS.get()).getLevel(tool);
     }
 }
